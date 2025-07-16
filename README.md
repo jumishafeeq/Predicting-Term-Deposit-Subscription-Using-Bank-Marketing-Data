@@ -51,6 +51,7 @@ This is framed as a binary classification task where:
 
 ### 2. Data Preprocessing
 
+* Checked and confirmed no missing values
 * Encode the target variable: `y` → {"yes": 1, "no": 0}
 * Detect and address class imbalance using **SMOTE** (Synthetic Minority Oversampling Technique).
 * Handle skewed distributions using `np.log1p` transformation.
@@ -99,24 +100,14 @@ This is framed as a binary classification task where:
   * Accuracy, Precision, Recall, F1-Score
   * ROC-AUC Curve
 
-### 9. Final Testing on Unseen Data
+### 9. Prediction on Unseen Data
 
-* Predict outcomes on unseen test set.
-* Compare performance consistency with validation set results.
-
----
-
-##  Feature Overview
-
-| Feature Group    | Sample Features                               |
-| ---------------- | --------------------------------------------- |
-| Demographics     | `age`, `job`, `marital`, `education`          |
-| Financial Status | `balance`, `loan`, `housing`                  |
-| Contact Info     | `contact`, `month`, `day_of_week`, `duration` |
-| Past Campaigns   | `campaign`, `pdays`, `previous`, `poutcome`   |
-| Socio-Economic   | `emp.var.rate`, `cons.conf.idx`, `euribor3m`  |
+- The best-performing model was tested on an unseen dataset (`unseen_data.csv`)
+- The same preprocessing steps were applied to the unseen data
+- Final predictions were generated and evaluated
 
 ---
+
 
 ##  Model Evaluation Summary
 
