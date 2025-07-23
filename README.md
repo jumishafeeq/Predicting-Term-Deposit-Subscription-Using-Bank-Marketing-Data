@@ -8,16 +8,13 @@ By building a classification model with robust preprocessing and evaluation step
 
 ---
 
-##  Problem Statement
+## Objectives
 
-Bank marketing campaigns can be resource-intensive and often result in low success rates. Predicting the likelihood of customer subscription can significantly improve marketing efficiency. Therefore, this project seeks to answer the following:
-
-**"Can we predict whether a customer will subscribe to a term deposit based on their profile and interaction history?"**
-
-This is framed as a binary classification task where:
-
-* **Positive Class (1)**: Customer subscribed to a term deposit.
-* **Negative Class (0)**: Customer did not subscribe.
+- Understand customer behavior from marketing data.
+- Build and compare classification models to predict subscription.
+- Address class imbalance using SMOTE.
+- Tune the best model for optimal performance.
+- Deploy the final model and make predictions on unseen data.
 
 ---
 
@@ -92,6 +89,12 @@ This is framed as a binary classification task where:
 * Use **GridSearchCV** to identify the best parameter combinations for each classifier.
 * Perform 5-fold cross-validation during tuning.
 
+#### XGBoost (Final Model)
+- Tuned using `GridSearchCV` on parameters:
+  - `n_estimators`, `max_depth`, `learning_rate`, `subsample`, `colsample_bytree`
+- Achieved the best overall performance in **accuracy** and **precision**
+- Selected as the **final deployed model**
+
 ### 8. Model Evaluation
 
 * Evaluate model on **Validation Set** using:
@@ -100,27 +103,40 @@ This is framed as a binary classification task where:
   * Accuracy, Precision, Recall, F1-Score
   * ROC-AUC Curve
 
-### 9. Prediction on Unseen Data
+---
 
-- The best-performing model was tested on an unseen dataset (`unseen_data.csv`)
-- The same preprocessing steps were applied to the unseen data
-- Final predictions were generated and evaluated
+### 9. Pipeline Creation and Deployment
+
+We built an end-to-end pipeline using `ImbPipeline`:
+
+- Steps:
+  1. Preprocessing (`ColumnTransformer`)
+  2. Feature selection (`SelectKBest`)
+  3. Resampling (`SMOTE`)
+  4. Final model (`XGBoostClassifier`)
+- Saved using `joblib.dump()`
+- Can be reused on unseen datasets without re-running preprocessing
+
+---
+
+### 10. Prediction on Unseen Data
+
+- Preprocessed the new dataset using the **same steps**
+- Loaded saved model: `model_pipeline.pkl`
+- Predicted outcomes
+- Saved results to `unseen_predictions.csv`
 
 ---
 
 
 ##  Model Evaluation Summary
 
-| Model               | Metric Used   | Best Score (Val Set) |
-| ------------------- | ------------- | -------------------- |
-| Logistic Regression | ROC-AUC / F1  | \~0.78 / \~0.60      |
-| Decision Tree       | Accuracy / F1 | \~0.84 / \~0.64      |
-| Random Forest       | ROC-AUC / F1  | \~0.88 / \~0.70      |
-| Gradient Boosting   | ROC-AUC / F1  | \~0.90 / \~0.72      |
-| K-Nearest Neighbors | Accuracy / F1 | \~0.80 / \~0.65      |
-| SVM Classifier      | ROC-AUC / F1  | \~0.82 / \~0.66      |
-
-**Note**: The scores vary based on hyperparameters selected via GridSearchCV.
+| Model                   | Accuracy | Precision | Recall | F1 Score | ROC-AUC |
+|------------------------|----------|-----------|--------|----------|---------|
+| Logistic Regression     | 0.7876   | 0.2997    | 0.6624 | 0.4127   | 0.7793  |
+| XGBoost (Tuned)         | **0.8862** | **0.4930** | 0.3534 | **0.4117** | **0.7729** |
+| Linear SVM              | 0.7804   | 0.2938    | **0.6753** | 0.4094   | 0.7800  |
+| Random Forest           | 0.8701   | 0.4060    | 0.3290 | 0.3635   | 0.7554  |
 
 ---
 
